@@ -1,0 +1,48 @@
+---
+description: Project rules for AI Software Engineering Workflow Template
+globs:
+alwaysApply: true
+---
+
+# Project Rules
+
+## Project Type
+
+This is a template repository for solo developers using AI coding tools. It is NOT a business application.
+
+DO NOT create React/Vue/Electron apps, backend services, or CLI tools as part of this template.
+
+## Core Philosophy
+
+```
+Repository manages state, AI manages execution, CI manages quality, Human manages decisions.
+```
+
+The goal is NOT to make AI write more code, but to make AI write more maintainable code within clear boundaries and quality rules.
+
+## Required Reading
+
+Before editing any code, read in order:
+
+1. README.md
+2. docs/00_project_brief.md
+3. docs/04_architecture.md
+4. docs/05_module_boundaries.md
+5. docs/06_coding_standards.md
+6. docs/07_testing_strategy.md
+7. Current Issue or task description
+
+## Rules
+
+1. Do NOT code from vague requirements. Output a plan first.
+2. Do NOT expand task scope without permission.
+3. Do NOT refactor unrelated code.
+4. Do NOT introduce new dependencies without justification.
+5. Do NOT bypass tests.
+6. Do NOT modify files outside the task scope.
+7. STOP and ask when uncertain.
+8. After changes, always report: what files changed, why, test results, risks.
+
+## Language
+
+Documentation and comments should be primarily in Chinese, with technical terms in English where appropriate.

@@ -1,0 +1,138 @@
+name: CI - Template Repository Checks
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  template-checks:
+    runs-on: ubuntu-latest
+    name: Check Template Repository Structure
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check critical files exist
+        run: |
+          echo "Checking critical files..."
+          missing=0
+
+          files=(
+            "README.md"
+            "AGENTS.md"
+            "docs/00_project_brief.md"
+            "docs/04_architecture.md"
+            "docs/05_module_boundaries.md"
+            ".ai/prompts/SUPERVISOR_SYSTEM_PROMPT.md"
+            ".github/pull_request_template.md"
+          )
+
+          for file in "${files[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "::error::Missing critical file: $file"
+              missing=$((missing + 1))
+            else
+              echo "  OK: $file"
+            fi
+          done
+
+          if [ $missing -gt 0 ]; then
+            echo "::error::$missing critical file(s) missing"
+            exit 1
+          fi
+
+          echo "All critical files present."
+
+      - name: Check critical directories exist
+        run: |
+          echo "Checking critical directories..."
+          missing=0
+
+          dirs=(
+            "docs"
+            ".ai/prompts"
+            ".ai/protocols"
+            ".ai/examples"
+            ".ai-runs"
+            ".github/ISSUE_TEMPLATE"
+            ".github/workflows"
+          )
+
+          for dir in "${dirs[@]}"; do
+            if [ ! -d "$dir" ]; then
+              echo "::error::Missing critical directory: $dir"
+              missing=$((missing + 1))
+            else
+              echo "  OK: $dir"
+            fi
+          done
+
+          if [ $missing -gt 0 ]; then
+            echo "::error::$missing critical directory(ies) missing"
+            exit 1
+          fi
+
+          echo "All critical directories present."
+
+      # ============================================================
+      # 以下注释说明：具体项目应根据技术栈添加对应的 CI 步骤
+      # ============================================================
+      #
+      # Node.js 项目示例：
+      #
+      #   - name: Setup Node.js
+      #     uses: actions/setup-node@v4
+      #     with:
+      #       node-version: '20'
+      #       cache: 'npm'
+      #
+      #   - name: Install dependencies
+      #     run: npm ci
+      #
+      #   - name: Lint
+      #     run: npm run lint
+      #
+      #   - name: Type check
+      #     run: npm run typecheck
+      #
+      #   - name: Test
+      #     run: npm test
+      #
+      #   - name: Build
+      #     run: npm run build
+      #
+      # Python 项目示例：
+      #
+      #   - name: Setup Python
+      #     uses: actions/setup-python@v5
+      #     with:
+      #       python-version: '3.12'
+      #
+      #   - name: Install dependencies
+      #     run: pip install -r requirements.txt
+      #
+      #   - name: Lint
+      #     run: ruff check .
+      #
+      #   - name: Type check
+      #     run: mypy .
+      #
+      #   - name: Test
+      #     run: pytest
+      #
+      # Rust 项目示例：
+      #
+      #   - name: Setup Rust
+      #     uses: dtolnay/rust-toolchain@stable
+      #
+      #   - name: Lint
+      #     run: cargo clippy -- -D warnings
+      #
+      #   - name: Test
+      #     run: cargo test
+      #
+      #   - name: Build
+      #     run: cargo build --release
