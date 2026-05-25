@@ -1,141 +1,51 @@
 # FEEDBACK_PROTOCOL.md
 
-> 用户反馈处理协议。每个检查点和每个 Stage Gate 必须保留用户反馈入口。
+> 本文件只定义反馈转译协议。
 
----
+## Goal
 
-## 核心原则
+把用户或监督 Agent 的自然语言反馈，转成可执行的工程约束。
 
-```text
-1. 子 Agent 不直接把杂乱日志甩给用户。
-2. 监督 Agent 必须先压缩、诊断、归因。
-3. 用户反馈必须转成工程约束。
-4. Human Brief 是面向人的决策卡片，不是日志。
-5. 每个 Stage Gate 都必须有人类反馈入口。
-6. 每个 Artifact 都必须有 Human Review 区块。
-7. 用户反馈必须能转成 Stage Gate 决策或工程约束。
-```
-
----
-
-## 反馈流
+## Feedback Flow
 
 ```text
-子 Agent 检查点报告
-↓
-监督 Agent 审查
-↓
-（如有需要用户参与的问题）
-↓
-生成 Human Brief
-↓
-用户收到 Human Brief
-↓
-用户给出反馈
-↓
-监督 Agent 转译反馈
-↓
-生成工程约束 + 修正 Prompt
-↓
-下发给子 Agent
+raw feedback
+→ summarize
+→ diagnose
+→ translate into constraints
+→ assign owner
+→ update task / plan / artifact
 ```
 
----
+## Translation Rules
 
-## 用户反馈类型
+1. 不要原样转发杂乱日志。
+2. 先说明问题是什么、影响哪里、需要谁处理。
+3. 把模糊反馈改成明确约束。
+4. 方向性反馈要对齐到对应 Gate。
 
-用户可以随时给出以下类型反馈：
+## Common Mappings
 
-| 反馈 | 含义 | 监督 Agent 应做的事 |
-|------|------|-------------------|
-| 继续 | 当前进度满意，继续执行 | 通知子 Agent 继续下一个检查点 |
-| 小修后继续 | 方向对但有小问题 | 将小修需求转为工程约束，下发给对应子 Agent |
-| 方向不对 | 当前实现方向偏离预期 | 暂停所有子 Agent，与用户讨论新方向 |
-| 交互不对 | UI/交互不符合预期 | 将具体交互要求转为 UI Agent 的修正约束 |
-| 不要修改这个文件 | 某个文件不应被改 | 更新 Forbidden Files，通知子 Agent 回退该文件修改 |
-| 缩小任务范围 | 任务太大了 | 重新评估优先级，减少子任务数量 |
-| 让某个 Agent 停止 | 某个子 Agent 不应继续 | 暂停对应子 Agent，保留已完成的部分 |
-| 让某个 Agent 返工 | 某个子 Agent 的产出需要重来 | 明确返工范围，生成新的任务卡 |
-| 重新设计方案 | 整体方案需要重新考虑 | 暂停所有子 Agent，回到需求分析阶段 |
+| 用户反馈 | 转译结果 |
+|---|---|
+| 继续 | 保持当前计划，进入下一步 |
+| 小修后继续 | 列出具体修改点，更新任务边界 |
+| 方向不对 | 暂停执行，回到 Idea Gate 或 MVP Gate |
+| 范围太大 | 缩小范围，更新 Out of scope |
+| 不要改这个文件 | 加入 Forbidden Files |
+| 先别发布 | 停在 Launch Gate，补指标或反馈渠道 |
 
-### Stage Gate 反馈类型
+## Record Format
 
-| 反馈 | 适用 Gate | 监督 Agent 应做的事 |
-|------|----------|-------------------|
-| build | Idea Gate | 确认问题已验证，进入 MVP Gate |
-| refine | Idea Gate | 回到问题陈述，缩小或调整 |
-| reject | Idea Gate | 停止该方向 |
-| implement | MVP Gate | 确认范围，进入 Implementation Gate |
-| narrow | MVP Gate | 缩小范围，重新确认排除项 |
-| redesign | MVP Gate | 回到 Idea Gate 重新设计 |
-| pause | MVP Gate | 暂停，等待更多信息 |
-| approve plan | Implementation Gate | 确认 Plan Artifact，开始执行 |
-| revise plan | Implementation Gate | 修改 Plan，重新确认 |
-| merge | Review Gate | 确认审查通过，允许合并 |
-| request changes | Review Gate | 要求修改后重新审查 |
-| rollback | Review / Launch Gate | 执行回退 |
-| release | Launch Gate | 确认发布 |
-| private beta | Launch Gate | 缩小发布范围 |
-| delay | Launch Gate | 延迟发布 |
-| automate | Scale Gate | 允许固化流程 |
-| keep manual | Scale Gate | 保持手动执行 |
-| observe more | Scale Gate | 继续观察，暂不决定 |
+每次反馈至少记录：
 
----
+- 原始反馈
+- 转译后的工程约束
+- 下发对象
+- 当前状态
 
-## 监督 Agent 的反馈处理规则
+## Do Not
 
-1. **压缩**：不要把子 Agent 的原始输出直接传递给用户。提炼关键信息。
-
-2. **诊断**：当用户对结果不满意时，先诊断问题出在哪里：
-   - 是哪个 Agent 的问题？
-   - 是需求不清晰导致的？还是 Agent 执行偏离了？
-   - 是架构约束不够？还是 Agent 越权了？
-
-3. **归因**：在 Human Brief 中明确问题归属，不要笼统说"有个问题"。
-
-4. **转译**：用户反馈要转为具体的工程约束，例如：
-   - 用户说"这个按钮不要放主界面"
-   - 转译为：移除主界面按钮、将入口移动到设置页、不修改状态管理逻辑
-
-5. **确认**：转译后的工程约束应让用户确认，避免二次理解偏差。
-
-6. **Gate 对齐**：当反馈涉及方向性决策时，应将反馈对齐到对应的 Stage Gate：
-   - 如果用户说"这个方向不对"，应触发 Idea Gate 的 refine 或 reject
-   - 如果用户说"功能太多了"，应触发 MVP Gate 的 narrow
-   - 如果用户说"发布吧"，应在 Launch Gate 确认指标和回退方案后再 release
-
-7. **Artifact 审查**：每个 Artifact 都必须包含 Human Review 区块，由用户确认后才能进入下一阶段。
-
----
-
-## 反馈记录
-
-所有用户反馈和监督 Agent 的转译结果都应记录到 `.ai-runs/` 对应目录下的 `human-feedback.md`。
-
-记录格式：
-
-```markdown
-## [时间戳] 反馈 #N
-
-### 用户原始反馈
-
-[用户的原话]
-
-### 反馈类型
-
-[方向调整 / 交互修正 / 范围缩小 / ...]
-
-### 监督 Agent 转译后的工程约束
-
-1. [约束 1]
-2. [约束 2]
-
-### 下发对象
-
-[哪个子 Agent]
-
-### 处理状态
-
-[待处理 / 已下发 / 已完成]
-```
+- 不要跳过用户确认
+- 不要把主观猜测当成用户意思
+- 不要让方向性反馈绕过 Stage Gate

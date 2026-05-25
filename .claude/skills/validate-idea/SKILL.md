@@ -1,54 +1,57 @@
 ---
 name: validate-idea
-description: 在写代码前验证想法是否值得进入 MVP。用于 Idea Gate 阶段。
+description: Validate whether a new idea should enter Idea Gate.
 ---
 
-# validate-idea
+# Validate Idea
 
 ## Purpose
 
-在写任何代码之前，先验证问题是否真实存在，目标用户是否具体，方案是否有差异化。
+Generate an Idea Validation Artifact for Idea Gate.
 
 ## When to use
 
-- 有了一个产品想法，想判断是否值得投入
-- 进入 Idea Gate 时
-- 用户说"我有个想法"但没有验证过问题
+- A new product or feature idea appears
+- The problem still feels speculative
+- The user wants a build / refine / reject decision
+
+## Read first
+
+- AI_WORKFLOW.md
+- docs/11_stage_gates.md
+- docs/13_human_gate_and_rollback.md
+- .ai/artifacts/IDEA_VALIDATION_ARTIFACT_TEMPLATE.md
 
 ## Inputs
 
-- Problem statement（问题陈述）
-- Target user（目标用户）
-- Existing alternatives（已有替代方案）
-- Known evidence（已知证据）
-- User constraints（用户约束）
+- Problem statement
+- Target user
+- Evidence
+- Existing alternatives
 
 ## Outputs
 
-- Idea Validation Artifact（参见 `.ai/artifacts/IDEA_VALIDATION_ARTIFACT_TEMPLATE.md`）
-- Decision suggestion：build / refine / reject
+- Idea Validation Artifact
+- Decision suggestion: build / refine / reject
 
 ## Steps
 
-1. 读取 AI_WORKFLOW.md、docs/12_problem_validation.md 了解验证方法
-2. 向用户收集：问题陈述、目标用户、替代方案、已知证据
-3. 检查问题是否真实（有证据还是纯假设）
-4. 检查目标用户是否具体（不是"所有人"）
-5. 列出 3-5 个替代方案及各自的优缺点
-6. 评估痛点的频率和强度
-7. 分别列出支持进入 MVP 的证据和应该暂停的证据
-8. 填写 Idea Validation Artifact
-9. 输出建议决策：build / refine / reject
-10. **暂停**，等待 Human Owner 确认
+1. Confirm the task is in Idea Gate.
+2. Read only the files above.
+3. Check whether the problem, user, and evidence are clear.
+4. Fill the Idea Validation Artifact.
+5. Ask for Human Owner review and stop.
 
-## Human review requirements
+## Human review
 
-- Idea Validation Artifact 必须由 Human Owner 审查
-- 最终决策（build / refine / reject）必须由 Human Owner 做出
-- AI 不能自行决定跳过 Idea Gate 进入实现
+Human Owner must review the artifact and choose `build`, `refine`, or `reject`.
 
 ## Stop conditions
 
-- 问题无法定义清楚 → 建议用户重新思考
-- 没有任何支持证据 → 建议 reject
-- 目标用户是"所有人" → 建议用户缩小范围
+- Problem is unclear
+- Target user is unclear
+- Evidence is missing
+- File boundary is unclear
+- Rollback thinking is missing
+- User has not approved the decision step
+- Any action would auto commit / push / merge / release

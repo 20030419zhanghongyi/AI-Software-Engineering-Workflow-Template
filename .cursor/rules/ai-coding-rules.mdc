@@ -11,7 +11,7 @@ alwaysApply: true
 1. Read AGENTS.md
 2. Read AI_WORKFLOW.md and TOOLCHAIN.md
 3. Read required project documents (see Required Reading in AGENTS.md)
-4. Identify which Stage Gate the current task belongs to (see docs/11_founder_stage_gates.md)
+4. Identify which Stage Gate the current task belongs to (see docs/11_stage_gates.md)
 5. Understand the current Issue or task's scope, boundaries, and acceptance criteria
 6. Generate a Plan Artifact before implementing
 7. WAIT for human confirmation before modifying code

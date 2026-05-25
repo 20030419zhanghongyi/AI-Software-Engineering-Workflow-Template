@@ -1,64 +1,56 @@
 ---
 name: scale-automation-review
-description: 判断重复流程是否值得固化为 Skill、Script、CI 或 Docs。用于 Scale Gate 阶段。
+description: Evaluate whether a repeated workflow should be automated.
 ---
 
-# scale-automation-review
+# Scale Automation Review
 
 ## Purpose
 
-在项目运行一段时间后复盘，判断哪些重复流程值得固化为 Skill / Script / CI / Docs，哪些必须保持手动。防止盲目自动化。
+Generate a Scale Automation Review Artifact for Scale Gate.
 
 ## When to use
 
-- 进入 Scale Gate 时（项目复盘阶段）
-- 发现某些操作重复出现 3 次以上
-- 考虑将手动流程自动化时
+- A workflow has repeated several times
+- The user wants to formalize a process
+- Automation risk must be reviewed before action
+
+## Read first
+
+- AI_WORKFLOW.md
+- docs/11_stage_gates.md
+- docs/13_human_gate_and_rollback.md
+- .ai/artifacts/SCALE_AUTOMATION_REVIEW_TEMPLATE.md
 
 ## Inputs
 
-- Retrospective 记录（docs/10_retrospective.md）
-- Repeated tasks（重复出现的任务）
-- Current workflow pain points（当前工作流的痛点）
-- Human judgment requirements（哪些步骤需要人判断）
+- Repeated workflow
+- Frequency
+- Human judgment needs
+- Current pain points
 
 ## Outputs
 
-- Scale Automation Review Artifact（参见 `.ai/artifacts/SCALE_AUTOMATION_REVIEW_TEMPLATE.md`）
-- Suggested automation form：Skill / Script / CI / Docs
-- Risks
-- Decision suggestion：automate / keep manual / observe more
+- Scale Automation Review Artifact
+- Decision suggestion: automate / keep manual / observe more
 
 ## Steps
 
-1. 读取 AI_WORKFLOW.md、docs/16_scale_workflow_automation.md 了解自动化审查方法
-2. 读取 Retrospective 记录，识别重复出现的任务
-3. 对每个重复任务评估：
-   - 出现次数是否 3 次以上
-   - 每次是否遵循相同步骤
-   - 过程中是否需要人的主观判断
-4. 选择建议的固化形式：
-   - 步骤固定、无需人判断 → CI
-   - 步骤固定、需确认输出 → Skill
-   - 少量判断可参数化 → Script
-   - 大量主观判断 → Docs
-5. 评估自动化风险
-6. 确认回退方式（保留手动流程文档）
-7. 填写 Scale Automation Review Artifact
-8. 输出建议决策：automate / keep manual / observe more
-9. **暂停**，等待 Human Owner 确认
+1. Confirm the task is in Scale Gate.
+2. Read only the files above.
+3. Record repeated workflow, frequency, judgment needs, suggested form, and risks.
+4. Fill the Scale Automation Review Artifact.
+5. Ask for Human Owner review and stop.
 
-## Human review requirements
+## Human review
 
-- 自动化决策必须由 Human Owner 做出
-- 每个自动化候选的回退方式必须由 Human Owner 确认
-- AI 不能自行创建 CI、自行修改工作流
+Human Owner must decide whether to automate, keep manual, or observe more.
 
 ## Stop conditions
 
-- 流程未重复 3 次以上 → 建议观察更多
-- 流程中需要大量主观判断 → 建议 keep manual
-- 缺少回退方式 → 建议先设计回退再考虑自动化
-- 涉及删除数据、修改密钥、merge、release → 不能自动化
-
-**注意**：本 Skill 不得自动创建 CI workflow、不得自动修改生产配置。
+- Workflow is not actually repeated
+- Human judgment needs are unclear
+- Suggested automation form is unclear
+- Manual fallback is missing
+- User has not approved the decision step
+- Any action would auto commit / push / merge / release
