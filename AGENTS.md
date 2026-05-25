@@ -21,12 +21,16 @@
 
 ```text
 1. README.md
-2. docs/00_project_brief.md
-3. docs/04_architecture.md
-4. docs/05_module_boundaries.md
-5. docs/06_coding_standards.md
-6. docs/07_testing_strategy.md
-7. 当前 Issue 或任务说明
+2. AI_WORKFLOW.md
+3. TOOLCHAIN.md
+4. docs/00_project_brief.md
+5. docs/04_architecture.md
+6. docs/05_module_boundaries.md
+7. docs/06_coding_standards.md
+8. docs/07_testing_strategy.md
+9. docs/11_founder_stage_gates.md
+10. docs/19_rollback_and_human_gate_protocol.md
+11. 当前 Issue 或任务说明
 ```
 
 如果以上任何文件不存在，先报告缺失文件，不要自行跳过。
@@ -37,6 +41,8 @@
 
 ```text
 仓库管状态，AI 管执行，CI 管质量，人管决策。
+Stage Gates 管方向，Artifacts 管证据，Rollback 管风险。
+AI 压缩的是执行成本，不是判断成本。
 
 本项目的目标不是让 AI 写更多代码，
 而是让 AI 在明确边界和质量规则下写出更可维护的代码。
@@ -56,6 +62,11 @@
 8. 修改完成后，必须说明改了哪些文件、为什么改、测试结果、风险。
 9. 技术架构变化必须更新 docs/09_decision_log.md。
 10. 优先做小而可审查的修改，不要一口气大改。
+11. 必须先判断当前任务属于哪个 Stage Gate，参见 `docs/11_founder_stage_gates.md`。
+12. 实现前必须生成 Plan Artifact，参见 `.ai/artifacts/PLAN_ARTIFACT_TEMPLATE.md`。
+13. 关键点必须等待人工确认，不能自行跳过 Human Gate。
+14. 必须保留回退方案，参见 `docs/19_rollback_and_human_gate_protocol.md`。
+15. Antigravity / Claude Code / Codex 都不能绕过 GitHub 事实中心。
 
 ---
 
@@ -66,11 +77,14 @@
 1. 阅读本文件（AGENTS.md）。
 2. 阅读 Required Reading Order 中列出的文档。
 3. 理解当前 Issue 或任务的目标、边界和验收标准。
-4. 输出执行计划，包括：任务理解、计划修改的文件、实现步骤、风险。
-5. 等待人类确认后，再开始修改代码。
+4. 判断当前任务属于哪个 Stage Gate。
+5. 生成 Plan Artifact，包括：任务理解、计划修改的文件、实现步骤、风险、回退方案。
+6. 等待人类确认 Plan Artifact 后，再开始修改代码。
 
 ```text
 禁止：直接从模糊需求跳到代码。
+禁止：跳过 Plan Artifact 直接执行。
+禁止：跳过 Human Gate 进入下一阶段。
 ```
 
 ---

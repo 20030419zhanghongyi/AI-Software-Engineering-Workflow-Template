@@ -4,6 +4,8 @@
 
 > 本项目的目标不是让 AI 写更多代码，而是让 AI 在明确边界和质量规则下写出更可维护的代码。
 
+> **v0.2** — 新增 Founder Stage Gates、Antigravity 执行工作台、Claude Code Skills、Codex Skills、Artifact 证据链、Rollback Protocol、Human Gate。
+
 ---
 
 ## What is this?
@@ -18,6 +20,8 @@
 
 ```text
 仓库管状态，AI 管执行，CI 管质量，人管决策。
+Stage Gates 管方向，Artifacts 管证据，Rollback 管风险。
+AI 压缩的是执行成本，不是判断成本。
 ```
 
 ---
@@ -68,6 +72,15 @@ AI 很擅长快速生成代码，
 8. 所有重要技术决策都应该能被追溯。
 9. 每个 AI coding 任务都应该有边界、计划、检查和验收。
 10. 项目能跑只是最低要求，项目可维护才是目标。
+11. AI 压缩的是执行成本，不是判断成本。
+```
+
+v0.2 新增原则：
+
+```text
+Stage Gates 管方向：不做没验证的想法，不发布没定义指标的版本。
+Artifacts 管证据：每个阶段的产出必须有记录、可审查。
+Rollback 管风险：每个阶段都有回退方式，没有不可逆操作。
 ```
 
 ---
@@ -88,6 +101,77 @@ AI 很擅长快速生成代码，
 ```
 
 关注的不是 AI coding 的"生成速度"，而是 AI coding 的"工程可控性"。
+
+---
+
+## v0.2: Stage Gates + Multi-tool workflow
+
+v0.2 在 v0.1 软件工程流程基础上新增方向控制层和工具链集成。详见 [AI_WORKFLOW.md](./AI_WORKFLOW.md)。
+
+### 两层流程
+
+```text
+方向控制层（Stage Gates）：
+Idea Gate → MVP Gate → Implementation Gate → Review Gate → Launch Gate → Scale Gate
+
+执行层（软件工程流程，不变）：
+需求分析 → 技术调研 → 技术选型 → 架构设计 → 模块边界 → 编码规范
+→ Issue → Plan → Implementation → Test → Review → PR → CI → Merge → Release → Retrospective
+```
+
+Stage Gate 是方向控制层，软件工程流程是执行层。两层并行，不互相替代。
+
+### 工具链
+
+| 工具 | 角色 |
+|---|---|
+| GitHub Repository | 事实中心 |
+| Antigravity | 执行工作台 |
+| Claude Code / Codex | 执行 + Skills 载体 |
+| Cursor | 编辑与规则辅助 |
+| GitHub Actions | 质量门禁 |
+| Human Owner | 最终决策者 |
+
+详见 [TOOLCHAIN.md](./TOOLCHAIN.md)。
+
+### Stage Gates
+
+每个 Gate 包含：目标、输入、输出 Artifact、人工决策点、回退方式。AI 可以准备 Artifact 和建议，不能做 Gate 决策。
+
+详见 `docs/11_founder_stage_gates.md`。
+
+### Artifact 证据链
+
+每个 Gate 的产出记录为标准化 Artifact，沉淀在仓库中：
+
+```text
+Idea Gate            → IDEA_VALIDATION_ARTIFACT
+MVP Gate             → MVP_SCOPE_ARTIFACT
+Implementation Gate  → PLAN_ARTIFACT + IMPLEMENTATION_REPORT
+Review Gate          → REVIEW_ARTIFACT
+Launch Gate          → LAUNCH_REVIEW_ARTIFACT
+Scale Gate           → SCALE_AUTOMATION_REVIEW_ARTIFACT
+任何 Gate            → ROLLBACK_PLAN
+```
+
+模板位于 `.ai/artifacts/`。
+
+### Skills
+
+v0.2 新增项目级 Skills，将常见流程标准化为可调用的技能模板：
+
+- Claude Code Skills：`.claude/skills/<name>/SKILL.md`
+- Codex Skills：`.agents/skills/<name>/SKILL.md`
+
+原有 `.claude/commands/` 保留为简单命令模板。
+
+### Human Gate 与 Rollback
+
+- 每个 Gate 都有人工检查点
+- 每个 Gate 都有回退方式
+- 以下操作禁止自动化：删除数据、修改密钥、自动 merge、自动 release、绕过 CI
+
+详见 `docs/19_rollback_and_human_gate_protocol.md`。
 
 ---
 
@@ -121,6 +205,8 @@ AI 很擅长快速生成代码，
 .
 ├── README.md                              # 项目入口说明（本文件）
 ├── AGENTS.md                              # AI coding 工具总规则
+├── AI_WORKFLOW.md                         # v0.2 AI 工作流总览
+├── TOOLCHAIN.md                           # v0.2 工具链角色矩阵
 ├── LICENSE                                # MIT License
 ├── .gitignore                             # Git 忽略规则
 │
@@ -135,7 +221,16 @@ AI 很擅长快速生成代码，
 │   ├── 07_testing_strategy.md            # 测试策略
 │   ├── 08_release_process.md             # 发布流程
 │   ├── 09_decision_log.md                # 技术决策记录
-│   └── 10_retrospective.md               # 项目复盘
+│   ├── 10_retrospective.md               # 项目复盘
+│   ├── 11_founder_stage_gates.md         # v0.2 Stage Gate 定义
+│   ├── 12_problem_validation.md          # v0.2 问题验证
+│   ├── 13_mvp_scope_control.md           # v0.2 MVP 范围控制
+│   ├── 14_launch_feedback_loop.md        # v0.2 发布反馈循环
+│   ├── 15_metrics_and_signal_framework.md # v0.2 指标与信号框架
+│   ├── 16_scale_workflow_automation.md   # v0.2 规模化自动化审查
+│   ├── 17_ai_tool_matrix.md             # v0.2 AI 工具矩阵
+│   ├── 18_antigravity_workflow.md        # v0.2 Antigravity 工作流
+│   └── 19_rollback_and_human_gate_protocol.md # v0.2 回退与人工门禁
 │
 ├── .ai/                                   # AI 工作流核心目录
 │   ├── README.md                          # .ai/ 说明
@@ -151,6 +246,15 @@ AI 很擅长快速生成代码，
 │   │   ├── FILE_BOUNDARY_RULES.md        # 文件边界规则
 │   │   ├── STOP_CONDITIONS.md            # 停止条件
 │   │   └── MERGE_PROTOCOL.md             # 合并协议
+│   ├── artifacts/                         # v0.2 Artifact 模板
+│   │   ├── IDEA_VALIDATION_ARTIFACT_TEMPLATE.md
+│   │   ├── MVP_SCOPE_ARTIFACT_TEMPLATE.md
+│   │   ├── PLAN_ARTIFACT_TEMPLATE.md
+│   │   ├── IMPLEMENTATION_REPORT_TEMPLATE.md
+│   │   ├── REVIEW_ARTIFACT_TEMPLATE.md
+│   │   ├── LAUNCH_REVIEW_ARTIFACT_TEMPLATE.md
+│   │   ├── SCALE_AUTOMATION_REVIEW_TEMPLATE.md
+│   │   └── ROLLBACK_PLAN_TEMPLATE.md
 │   └── examples/                          # 示例文档
 │       ├── example_project_brief.md
 │       ├── example_ai_coding_task.md
@@ -185,11 +289,29 @@ AI 很擅长快速生成代码，
 │   │   ├── logic-agent.md
 │   │   ├── test-agent.md
 │   │   └── docs-agent.md
-│   └── commands/                          # 自定义命令
+│   ├── skills/                            # v0.2 Claude Code Skills
+│   │   ├── validate-idea/SKILL.md
+│   │   ├── mvp-scope-check/SKILL.md
+│   │   ├── plan-from-issue/SKILL.md
+│   │   ├── implementation-report/SKILL.md
+│   │   ├── review-artifact/SKILL.md
+│   │   ├── launch-check/SKILL.md
+│   │   └── scale-automation-review/SKILL.md
+│   └── commands/                          # 自定义命令（legacy，仍可用）
 │       ├── plan.md
 │       ├── checkpoint.md
 │       ├── review.md
 │       └── summarize.md
+│
+├── .agents/                               # v0.2 Codex Skills
+│   └── skills/
+│       ├── validate-idea/SKILL.md
+│       ├── mvp-scope-check/SKILL.md
+│       ├── plan-from-issue/SKILL.md
+│       ├── implementation-report/SKILL.md
+│       ├── review-artifact/SKILL.md
+│       ├── launch-check/SKILL.md
+│       └── scale-automation-review/SKILL.md
 │
 └── scripts/                               # 辅助脚本
     ├── README.md
@@ -202,7 +324,7 @@ AI 很擅长快速生成代码，
 
 ## V0 workflow
 
-V0 是最小可用版本，目标是建立一套手动但完整的流程。不追求自动化，而是追求流程清晰。
+V0 是最小可用版本，目标是建立一套手动但完整的流程。不追求自动化，而是追求流程清晰。v0.2 在 V0 基础上增加了 Stage Gate 方向控制层。
 
 ### Step 1：从模板仓库创建新项目
 
@@ -223,37 +345,65 @@ docs/07_testing_strategy.md
 AGENTS.md
 ```
 
-### Step 3：创建 Issue
+### Step 3：Idea Gate（v0.2 新增）
 
-把要做的功能写成 Issue。Issue 中必须包含：目标、背景、允许修改文件、禁止修改文件、验收标准、测试要求。
+验证问题是否真实存在。参见 `docs/12_problem_validation.md`。
 
-### Step 4：让 AI 先读规则
+产出：IDEA_VALIDATION_ARTIFACT。人工决策：build / refine / reject。
 
-要求 AI 先阅读 AGENTS.md、项目文档、当前 Issue。
+### Step 4：MVP Gate（v0.2 新增）
 
-### Step 5：AI 先输出计划
+控制 MVP 范围，列出排除项。参见 `docs/13_mvp_scope_control.md`。
 
-AI 不应直接改代码，先输出任务理解、计划修改文件、实现步骤、风险。
+产出：MVP_SCOPE_ARTIFACT。人工决策：implement / narrow / redesign / pause。
 
-### Step 6：人工确认计划
+### Step 5：创建 Issue
+
+把要做的功能写成 Issue。Issue 中必须包含：目标、背景、允许修改文件、禁止修改文件、验收标准、测试要求、Stage Gate、Required Artifact、Rollback Plan。
+
+### Step 6：让 AI 先读规则
+
+要求 AI 先阅读 AI_WORKFLOW.md、TOOLCHAIN.md、AGENTS.md、项目文档、当前 Issue。
+
+### Step 7：AI 先输出 Plan Artifact（v0.2 增强）
+
+AI 不应直接改代码，先生成 Plan Artifact（文件边界、实现步骤、测试策略、回退方案），等人工确认。
+
+### Step 8：人工确认 Plan
 
 用户确认后才允许 AI 修改代码。
 
-### Step 7：AI 小步执行
+### Step 9：AI 小步执行
 
 每次修改应尽量小，避免一次性大改多个模块。
 
-### Step 8：运行检查
+### Step 10：运行检查
 
 至少运行：构建、测试、lint / typecheck。
 
-### Step 9：创建 PR 或检查 diff
+### Step 11：Review Gate（v0.2 新增）
+
+合并前审查代码、测试、风险和产品体验。产出 Review Artifact。
+
+### Step 12：创建 PR 或检查 diff
 
 合并前必须查看：改了哪些文件、是否越权、是否无关重构、是否引入新依赖、是否破坏模块边界、测试是否通过。
 
-### Step 10：合并或返工
+### Step 13：合并或返工
 
 用户决定：合并、小修、返工、回滚、或放弃本轮修改。
+
+### Step 14：Launch Gate（v0.2 新增，发布时使用）
+
+判断版本是否适合发布给真实用户。参见 `docs/14_launch_feedback_loop.md`。
+
+产出：LAUNCH_REVIEW_ARTIFACT。人工决策：release / private beta / delay / rollback。
+
+### Step 15：Scale Gate（v0.2 新增，复盘时使用）
+
+决定哪些重复流程值得固化为 Skill / Script / CI。参见 `docs/16_scale_workflow_automation.md`。
+
+产出：SCALE_AUTOMATION_REVIEW_ARTIFACT。
 
 ---
 
@@ -336,9 +486,13 @@ GitHub Issues                 # 任务管理
 GitHub Pull Requests          # 代码审查入口
 GitHub Actions                # 质量门禁
 AGENTS.md                     # AI coding 总规则
+AI_WORKFLOW.md                # v0.2 工作流总览
+TOOLCHAIN.md                  # v0.2 工具链角色矩阵
 .cursor/rules/                # Cursor 规则
-.claude/                      # Claude Code 配置
-ChatGPT                       # 顶层监督 Agent
+.claude/skills/               # v0.2 Claude Code Skills
+.claude/commands/             # Claude Code 命令模板（legacy）
+.agents/skills/               # v0.2 Codex Skills
+Antigravity                   # v0.2 执行工作台
 Codex / Claude Code / Cursor  # 执行层 AI coding 工具
 Cursor / VS Code              # 人工审查与修改
 Git branch / Git worktree     # 隔离开发
@@ -351,11 +505,13 @@ Markdown                      # 文档和过程记录
 
 1. 点击仓库页面的 **Use this template** 按钮，创建你自己的仓库。
 2. Clone 到本地。
-3. 填写 `docs/00_project_brief.md`，描述你要做的项目。
-4. 按需填写 `docs/01_requirements.md` 到 `docs/08_release_process.md`。
-5. 根据项目实际情况调整 `docs/05_module_boundaries.md` 和 `docs/06_coding_standards.md`。
-6. 确认 `AGENTS.md` 内容符合你的项目规则。
-7. 开始创建 Issue，让 AI coding 工具按规则执行。
+3. 阅读 `AI_WORKFLOW.md` 了解 v0.2 工作流全貌。
+4. 填写 `docs/00_project_brief.md`，描述你要做的项目。
+5. 按需填写 `docs/01_requirements.md` 到 `docs/08_release_process.md`。
+6. 根据项目实际情况调整 `docs/05_module_boundaries.md` 和 `docs/06_coding_standards.md`。
+7. 确认 `AGENTS.md` 内容符合你的项目规则。
+8. 通过 Idea Gate 验证你的想法（参见 `docs/12_problem_validation.md`）。
+9. 开始创建 Issue，让 AI coding 工具按规则执行。
 
 ---
 
@@ -369,15 +525,27 @@ Markdown                      # 文档和过程记录
 6. 根据技术栈修改 `AGENTS.md` 中的规则。
 7. 根据技术栈调整 `.github/workflows/ci.yml` 中的 CI 命令。
 8. 删除 `docs/10_retrospective.md` 中的模板示例（等项目阶段结束后再复盘填写）。
-9. 开始用 Issue + AI coding 流程开发。
+9. 阅读 `AI_WORKFLOW.md` 和 `TOOLCHAIN.md`，了解 Stage Gate 和工具链。
+10. 开始用 Issue + AI coding 流程开发。
 
 ---
 
 ## Roadmap
 
-### V0 — 当前版本
+### V0 (v0.1) — 已完成
 
-手动但完整的流程。文档、模板、规则全部就位，流程靠人执行。
+手动但完整的软件工程流程。文档、模板、规则全部就位，流程靠人执行。
+
+### V0 (v0.2) — 当前版本
+
+在 v0.1 基础上新增：
+- Founder Stage Gates（Idea → MVP → Implementation → Review → Launch → Scale）
+- Artifact 证据链（8 个标准化产物模板）
+- Antigravity 执行工作台集成
+- Claude Code Skills（7 个流程按钮）
+- Codex Skills（7 个流程按钮）
+- Rollback Protocol 和 Human Gate Protocol
+- AI_WORKFLOW.md 和 TOOLCHAIN.md
 
 ### V1 — 脚本辅助
 

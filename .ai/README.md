@@ -1,6 +1,6 @@
 # .ai/ Directory
 
-> 本目录存放 AI 工作流相关的 Prompt 模板、流程协议和示例文档。
+> 本目录存放 AI 工作流相关的 Prompt 模板、流程协议、Artifact 模板和示例文档。
 
 ---
 
@@ -21,6 +21,15 @@
 │   ├── FILE_BOUNDARY_RULES.md        # 文件边界规则
 │   ├── STOP_CONDITIONS.md            # 停止条件
 │   └── MERGE_PROTOCOL.md             # 合并协议
+├── artifacts/                         # v0.2 Artifact 模板
+│   ├── IDEA_VALIDATION_ARTIFACT_TEMPLATE.md
+│   ├── MVP_SCOPE_ARTIFACT_TEMPLATE.md
+│   ├── PLAN_ARTIFACT_TEMPLATE.md
+│   ├── IMPLEMENTATION_REPORT_TEMPLATE.md
+│   ├── REVIEW_ARTIFACT_TEMPLATE.md
+│   ├── LAUNCH_REVIEW_ARTIFACT_TEMPLATE.md
+│   ├── SCALE_AUTOMATION_REVIEW_TEMPLATE.md
+│   └── ROLLBACK_PLAN_TEMPLATE.md
 └── examples/                          # 示例文档
     ├── example_project_brief.md
     ├── example_ai_coding_task.md
@@ -56,6 +65,21 @@
 ### examples/
 
 存放示例文档，展示各个模板的具体用法。
+
+### artifacts/（v0.2 新增）
+
+存放 Stage Gate 产出物的标准化模板。每个 Artifact 对应一个 Stage Gate：
+
+- **IDEA_VALIDATION_ARTIFACT_TEMPLATE.md**：Idea Gate 产物
+- **MVP_SCOPE_ARTIFACT_TEMPLATE.md**：MVP Gate 产物
+- **PLAN_ARTIFACT_TEMPLATE.md**：Implementation Gate 计划产物
+- **IMPLEMENTATION_REPORT_TEMPLATE.md**：Implementation Gate 实现报告
+- **REVIEW_ARTIFACT_TEMPLATE.md**：Review Gate 产物
+- **LAUNCH_REVIEW_ARTIFACT_TEMPLATE.md**：Launch Gate 产物
+- **SCALE_AUTOMATION_REVIEW_TEMPLATE.md**：Scale Gate 产物
+- **ROLLBACK_PLAN_TEMPLATE.md**：通用回退计划模板
+
+Artifact 是 Stage Gate 的证据链，确保每个阶段的决策可追溯、可审查。
 
 ---
 

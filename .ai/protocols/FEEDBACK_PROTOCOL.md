@@ -1,6 +1,6 @@
 # FEEDBACK_PROTOCOL.md
 
-> 用户反馈处理协议。每个检查点必须保留用户反馈入口。
+> 用户反馈处理协议。每个检查点和每个 Stage Gate 必须保留用户反馈入口。
 
 ---
 
@@ -11,6 +11,9 @@
 2. 监督 Agent 必须先压缩、诊断、归因。
 3. 用户反馈必须转成工程约束。
 4. Human Brief 是面向人的决策卡片，不是日志。
+5. 每个 Stage Gate 都必须有人类反馈入口。
+6. 每个 Artifact 都必须有 Human Review 区块。
+7. 用户反馈必须能转成 Stage Gate 决策或工程约束。
 ```
 
 ---
@@ -55,6 +58,29 @@
 | 让某个 Agent 返工 | 某个子 Agent 的产出需要重来 | 明确返工范围，生成新的任务卡 |
 | 重新设计方案 | 整体方案需要重新考虑 | 暂停所有子 Agent，回到需求分析阶段 |
 
+### Stage Gate 反馈类型
+
+| 反馈 | 适用 Gate | 监督 Agent 应做的事 |
+|------|----------|-------------------|
+| build | Idea Gate | 确认问题已验证，进入 MVP Gate |
+| refine | Idea Gate | 回到问题陈述，缩小或调整 |
+| reject | Idea Gate | 停止该方向 |
+| implement | MVP Gate | 确认范围，进入 Implementation Gate |
+| narrow | MVP Gate | 缩小范围，重新确认排除项 |
+| redesign | MVP Gate | 回到 Idea Gate 重新设计 |
+| pause | MVP Gate | 暂停，等待更多信息 |
+| approve plan | Implementation Gate | 确认 Plan Artifact，开始执行 |
+| revise plan | Implementation Gate | 修改 Plan，重新确认 |
+| merge | Review Gate | 确认审查通过，允许合并 |
+| request changes | Review Gate | 要求修改后重新审查 |
+| rollback | Review / Launch Gate | 执行回退 |
+| release | Launch Gate | 确认发布 |
+| private beta | Launch Gate | 缩小发布范围 |
+| delay | Launch Gate | 延迟发布 |
+| automate | Scale Gate | 允许固化流程 |
+| keep manual | Scale Gate | 保持手动执行 |
+| observe more | Scale Gate | 继续观察，暂不决定 |
+
 ---
 
 ## 监督 Agent 的反馈处理规则
@@ -73,6 +99,13 @@
    - 转译为：移除主界面按钮、将入口移动到设置页、不修改状态管理逻辑
 
 5. **确认**：转译后的工程约束应让用户确认，避免二次理解偏差。
+
+6. **Gate 对齐**：当反馈涉及方向性决策时，应将反馈对齐到对应的 Stage Gate：
+   - 如果用户说"这个方向不对"，应触发 Idea Gate 的 refine 或 reject
+   - 如果用户说"功能太多了"，应触发 MVP Gate 的 narrow
+   - 如果用户说"发布吧"，应在 Launch Gate 确认指标和回退方案后再 release
+
+7. **Artifact 审查**：每个 Artifact 都必须包含 Human Review 区块，由用户确认后才能进入下一阶段。
 
 ---
 

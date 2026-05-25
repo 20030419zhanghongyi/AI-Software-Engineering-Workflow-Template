@@ -59,3 +59,34 @@
 - [ ] 测试通过
 - [ ] 文档已更新（如需要）
 - [ ] CHANGELOG 已更新（如需要）
+
+---
+
+## v0.2 Artifact Links
+
+- Plan Artifact: [链接或路径]
+- Implementation Report: [链接或路径]
+- Review Artifact: [链接或路径]
+- Rollback Plan: [链接或路径]
+
+## Human Gate Checklist
+
+- [ ] Plan was reviewed before implementation
+- [ ] File boundaries were respected
+- [ ] Tests were run and results are documented
+- [ ] Risks are documented
+- [ ] Rollback option is documented
+- [ ] Human owner reviewed this PR
+
+## CI Result
+
+- [ ] GitHub Actions passed
+- [ ] GitHub Actions failed and the failure is explained
+- [ ] CI not applicable
+
+## Launch Gate Readiness
+
+- [ ] Not a launch-related PR
+- [ ] Launch metrics are defined
+- [ ] Feedback collection plan exists
+- [ ] Rollback plan exists

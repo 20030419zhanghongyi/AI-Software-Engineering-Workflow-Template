@@ -9,10 +9,12 @@ alwaysApply: true
 ## Before Writing Code
 
 1. Read AGENTS.md
-2. Read required project documents (see Required Reading in AGENTS.md)
-3. Understand the current Issue or task's scope, boundaries, and acceptance criteria
-4. Output an execution plan covering: task understanding, files to modify, implementation steps, risks
-5. WAIT for human confirmation before modifying code
+2. Read AI_WORKFLOW.md and TOOLCHAIN.md
+3. Read required project documents (see Required Reading in AGENTS.md)
+4. Identify which Stage Gate the current task belongs to (see docs/11_founder_stage_gates.md)
+5. Understand the current Issue or task's scope, boundaries, and acceptance criteria
+6. Generate a Plan Artifact before implementing
+7. WAIT for human confirmation before modifying code
 
 ## Execution Rules
 
@@ -23,6 +25,8 @@ alwaysApply: true
 - Do NOT refactor unrelated code.
 - Do NOT introduce new dependencies without justification.
 - Do NOT bypass or skip tests.
+- Do NOT bypass Human Gate — every Stage Gate requires human approval to proceed.
+- Do NOT skip Plan Artifact — always generate and get approval before coding.
 
 ## Stop Conditions
 
@@ -37,6 +41,12 @@ STOP immediately and report if:
 7. Multiple agents would modify the same core file.
 8. You cannot determine the risk of a change.
 9. You are unsure about the correct approach.
+10. You are implementing without Idea Gate validation.
+11. MVP scope is expanding beyond what was agreed.
+12. You want to skip Plan Artifact or Human Review.
+13. CI is failing but you want to merge.
+14. Launch metrics are undefined but release is requested.
+15. You want to automate a process that requires human judgment.
 
 Stopping is not failure — it prevents errors from compounding.
 
@@ -48,9 +58,11 @@ You MUST output:
 2. **Test results**: What tests you ran and whether they passed.
 3. **Risk assessment**: Possible side effects, TODO items, documentation updates needed.
 4. **Review suggestions**: Which files need human review and why.
+5. **Artifact status**: Which Artifact was generated and its review status.
 
 ## Feedback Handling
 
 - When receiving feedback from the supervisor agent or user, translate it into concrete engineering constraints.
 - Do not interpret vague feedback loosely — ask for clarification if needed.
 - Update your task understanding after receiving feedback.
+- Direction-level feedback may trigger a Stage Gate decision (refine, narrow, redesign, etc.).
