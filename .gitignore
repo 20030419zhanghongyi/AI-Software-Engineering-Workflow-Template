@@ -22,6 +22,9 @@ Thumbs.db
 *.swp
 *.swo
 
+# Claude Code local settings
+.claude/settings.local.json
+
 # AI runs - preserve structure, ignore runtime artifacts
 .ai-runs/*/logs/
 .ai-runs/*/tmp/
